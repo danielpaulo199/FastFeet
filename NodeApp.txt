@@ -88,6 +88,15 @@ Database:
                     };
             }
 
+        Conexão: Iniciara junto todos os models da aplicação.
+            No index do banco importara sequelize que realiza a conexão (new Sequelize(configs)),
+            e asconfigs do banco. Cria uma classe do banco que sera intanciada
+            para realizar uma nova conexão no export, chamar ./database/index name
+            raiz da aplicação.
+
+                Métodos: Construtor() = chama o init()
+                         Init() = realiza conexão
+
         Migrations:
             Criar Micração: yarn sequelize migration:create --name=NOME_MIGRAÇÃO
             Executar Migração: yarn sequelize db:migrate
@@ -98,4 +107,28 @@ Database:
             Executar Seeds: yarn sequelize db:seed:all
 
 Models:
+    O que é: Especifica os campos da base de dados que podem ser mudados, como
+    por exemplo user pode acessar "nome, email, senha".
+
+    Fazer: importa Sequelize, { Model } do sequelize, cria uma classe que extende
+        o Model e contem um metodo estatico init(sequelize), assim se chama
+        super.init() que recebe como parametro as colunas do banco de dados e
+        segundo parametro um novo objeto com sequelize (tambem pode se trocar
+        nome da tabela e outros parametros).
+
+    Exporta: A classe criada sem new pois não tem construtor;
+
+Controllers:
+    Fazer: Importam o model que sera usado (ex:users) e cria uma classe como se
+        fose uma rota recebendo (req, res).
+
+    Metodos: async store(req, res)
+             async create
+
+    Export: new CLASSE_DO_CONTROLER()
+
+
+Autenticação:
+    Install: yarn add jsonwebtoken
+
 
