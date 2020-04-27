@@ -1,0 +1,101 @@
+App:
+    classe: construtor iria iniciar o server e os métodos.
+    métodos: server, routes, middlewares.
+    export: new app().server.
+
+    Install:
+        yarn add: express, nodemon, sucrase, eslint, prettier,
+        eslint-config-prettier, eslint-plugin-prettier,
+
+    Config:
+        Rodar eslint --init, criar arquivos .eslintrc e .prettierrc e criar
+        .editorconfig e mudar 2 ultimos para true.
+
+    .eslintrc:{
+                module.exports = {
+            env: {
+                es6: true,
+                node: true,
+            },
+            extends: ['airbnb-base', 'prettier'],
+            plugins: ['prettier'],
+            globals: {
+                Atomics: 'readonly',
+                SharedArrayBuffer: 'readonly',
+            },
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: 'module',
+            },
+            rules: {
+                'prettier/prettier': 'error',
+                'class-methods-use-this': 'off',
+                'no-param-reassign': 'off',
+                camelcase: 'off',
+                'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
+            },
+        };
+    }
+
+    .prettierrc: {
+        "singleQuote": true,
+        "trailingComma": "es5"
+    }
+
+Server:
+    importa app.
+    listen em uma porta.
+
+Routes:
+    importa Router do express.
+    normaliza as rotas.
+    export: routes.
+
+Database:
+    Uso sequelize
+
+    sequelize:
+        Install:
+            yarn add sequelize sequelize-cli
+
+        Config:
+            Criar arquivo .sequelizerc que utiliza a sintaze sem sucrase e tambem
+            no Config/database.js
+
+            .sequelizerc {
+                const { resolve } = require('path');
+
+                module.exports = {
+                    config: resolve(__dirname, 'src', 'config', 'database.js'),
+                    'models-path': resolve(__dirname, 'src', 'app', 'models'),
+                    'migrations-path': resolve(__dirname, 'src', 'database', 'migrations'),
+                    'seeders-path': resolve(__dirname, 'src', 'database', 'seeds'),
+                };
+            }
+
+            Config/database.js:{
+                module.exports = {
+                    dialect: 'postgres',
+                    host: 'localhost',
+                    username: 'USERNAME',
+                    password: 'PASSWORD',
+                    database: 'DATABASE_NAME',
+                    difene: {
+                        timestamps: true,
+                        underscored: true,
+                        underscoredAll: true,
+                    },
+                    };
+            }
+
+        Migrations:
+            Criar Micração: yarn sequelize migration:create --name=NOME_MIGRAÇÃO
+            Executar Migração: yarn sequelize db:migrate
+            Desfazer Migração: yarn sequelize db:migrate:undo  // ou db:migrate:undo:all
+
+        Seeds:
+            Criar Seeds: yarn sequelize seed:generate --name SEED_NAME
+            Executar Seeds: yarn sequelize db:seed:all
+
+Models:
+
