@@ -131,4 +131,7 @@ Controllers:
 Autenticação:
     Install: yarn add jsonwebtoken
 
+    Criação: No controller de sessão importa jwt, e após a validação de email e
+    senha retornar um objeto com token: jwt.sign(params infos na config/auth).
+
 
