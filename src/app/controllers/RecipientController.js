@@ -22,6 +22,12 @@ class RecipientController {
             cep,
         });
     }
+
+    async show(req, res) {
+        const users = await Recipient.findAll();
+
+        return res.status(200).json(users);
+    }
 }
 
 export default new RecipientController();

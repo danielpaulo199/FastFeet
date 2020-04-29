@@ -6,6 +6,7 @@ const routes = Router();
 
 routes.post('/login', SessionController.store);
 
+routes.get('/recipients', RecipientController.show);
 routes.post('/recipients/create', RecipientController.store);
 
 export default routes;
