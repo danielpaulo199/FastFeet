@@ -137,4 +137,16 @@ Autenticação:
     Criação: No controller de sessão importa jwt, e após a validação de email e
     senha retornar um objeto com token: jwt.sign(params infos na config/auth).
 
+    Uso: O token sera enviado por header para as rotas que necessitam de Autenticação
+    como Barer Token
 
+    middleware de auth: Deve pegar o token dos header e fazer a verificação dele
+    por meio do método verify do jwt, usando promisify pois verify nao é async,
+        Deve ser desestruturado tbm o token pois vem 2 strings.
+
+Middlewares:
+    É criado e depois chamado com 'routes.use(MIDDLEWARE)' assim as rotas abaixo
+    irão utilizar esse middleware.
+
+    Criação: export dafault (req, res, next) => {CODIGO}, sempre retonando next
+    para dar continuação
