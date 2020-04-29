@@ -109,6 +109,7 @@ Database:
 Models:
     O que é: Especifica os campos da base de dados que podem ser mudados, como
     por exemplo user pode acessar "nome, email, senha".
+        Models devem ser iniciados no index da Database!
 
     Fazer: importa Sequelize, { Model } do sequelize, cria uma classe que extende
         o Model e contem um metodo estatico init(sequelize), assim se chama
@@ -119,6 +120,8 @@ Models:
     Exporta: A classe criada sem new pois não tem construtor;
 
 Controllers:
+        Controllers são o que executam as ações quendo uma rota é chamada.
+
     Fazer: Importam o model que sera usado (ex:users) e cria uma classe como se
         fose uma rota recebendo (req, res).
 
