@@ -150,3 +150,15 @@ Middlewares:
 
     Criação: export dafault (req, res, next) => {CODIGO}, sempre retonando next
     para dar continuação
+
+Validação dos Dados:
+    Faz a validação dos dados passados para o req.body com o Yup, direto no
+    começo controller
+
+    install: yarn add Yup
+
+    import: import * as YUP from 'yup';
+
+    fazer: No inico do controller faz um schema = yup.object().shape({PARAMETROS})
+    para validar se as informações passadas no req.body podem ser inseridas
+
