@@ -56,6 +56,22 @@ class DeliverymanController {
         const { name, email } = await deliveryman.update(req.body);
         return res.status(200).json({ id, name, email });
     }
+
+    async delete(req, res) {
+        const { id } = req.params;
+
+        const deliveryman = await Deliveryman.findByPk(id);
+
+        if (!deliveryman) {
+            return res
+                .status(400)
+                .json({ error: 'Deliveryman does not exists' });
+        }
+
+        await deliveryman.destroy();
+
+        return res.status(200).json({ message: 'User removed' });
+    }
 }
 
 export default new DeliverymanController();
