@@ -162,3 +162,9 @@ Validação dos Dados:
     fazer: No inico do controller faz um schema = yup.object().shape({PARAMETROS})
     para validar se as informações passadas no req.body podem ser inseridas
 
+Upload de Arquivos:
+  install: yarn add multer
+  Fazer: Tera um arquivo de config que ira exportar um objeto com Storage que contém
+    Destination e Filename, para especificar para onde os arquivos upados irão.
+    Nas rotas tera uma constante upload = multer(MULTER_CONFIG) que sera utilizado
+    para fazer os middlewares nas rotas como o upload.single() 'um arquivo'.
