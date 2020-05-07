@@ -1,35 +1,37 @@
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        return queryInterface.createTable('Deliverymans', {
+        return queryInterface.createTable('Files', {
             id: {
                 type: Sequelize.INTEGER,
-                required: true,
-                alowNull: false,
+                allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
             },
+
             name: {
                 type: Sequelize.STRING,
-                required: true,
-                alowNull: false,
+                allowNull: false,
             },
-            email: {
+
+            path: {
                 type: Sequelize.STRING,
-                required: true,
-                alowNull: false,
+                allowNull: false,
+                unique: true,
             },
+
             createdAt: {
                 type: Sequelize.DATE,
-                alowNull: false,
+                allowNull: false,
             },
+
             updatedAt: {
                 type: Sequelize.DATE,
-                alowNull: false,
+                allowNull: false,
             },
         });
     },
 
     down: (queryInterface) => {
-        return queryInterface.dropTable('Deliverymans');
+        return queryInterface.dropTable('Files');
     },
 };
