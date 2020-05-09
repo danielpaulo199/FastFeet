@@ -18,8 +18,8 @@ routes.post('/login', SessionController.store);
 
 routes.get('/deliveryman/:id/deliveries', DMAController.index);
 routes.get('/deliveryman/:id/deliveries/dones', DMAController.show);
-
-routes.put('/deliveryman/:id/:delivery/takeoff', DMAController.update);
+routes.put('/deliveryman/:id/:delivery/withdraw', DMAController.withdraw);
+routes.put('/deliveryman/:id/:delivery/finish', DMAController.finish);
 
 routes.use(AuthMiddleware);
 routes.post('/files', upload.single('file'), FileController.store);

@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
 import Recipient from '../models/Recipient';
+import File from '../models/File';
 
 class DeliveryController {
     async store(req, res) {
@@ -30,6 +31,8 @@ class DeliveryController {
                 .json({ error: 'Deliveryman does not exists' });
         }
 
+        const file = await File.create();
+        req.body.signature_id = file.id;
         const delivery = await Delivery.create(req.body);
         return res.status(201).json({ delivery });
     }
