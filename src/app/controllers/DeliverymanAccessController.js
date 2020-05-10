@@ -8,7 +8,9 @@ import {
     setHours,
     startOfDay,
     endOfDay,
+    parseISO,
 } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 import Deliveryman from '../models/Deliveryman';
 import Delivery from '../models/Delivery';
@@ -102,44 +104,35 @@ class DeliverymanAccessController {
             return res.status(400).json({ error: 'Delivery canceled' });
         }
 
-        const initialDate = new Date();
-        const initialHour = setHours(
-            setMinutes(setSeconds(initialDate, 8), 0),
-            0
-        );
-        const finalHour = setHours(
-            setMinutes(setSeconds(initialDate, 18), 0),
-            0
+        // Validação da hora para retirada
+        const defualtDate = new Date();
+        const date = new Date(
+            defualtDate.valueOf() - defualtDate.getTimezoneOffset() * 60000
         );
 
-        if (
-            isAfter(initialDate, finalHour) ||
-            isBefore(initialDate, finalHour)
-        ) {
+        const initialHour = setSeconds(setMinutes(setHours(date, 8), 0), 0);
+        const finalHour = setSeconds(setMinutes(setHours(date, 18), 0), 0);
+
+        if (isBefore(date, initialHour) || isAfter(date, finalHour)) {
             return res.status(400).json({
                 error:
-                    'Deliveries can only be withdraw beetwen 8:00 am and 18:00 pm',
+                    'Deliveries can only be started between 08:00 am and 18:00 pm',
             });
         }
-
         const { count: numberOfDeliveries } = await Delivery.findAndCountAll({
             where: {
                 deliveryman_id: id,
                 start_date: {
-                    [Op.between]: [
-                        startOfDay(initialDate),
-                        endOfDay(initialDate),
-                    ],
+                    [Op.between]: [startOfDay(date), endOfDay(date)],
                 },
             },
         });
-
         if (numberOfDeliveries >= 5) {
             return res
                 .status(400)
                 .json({ error: 'You cant only withdraw 5 deliveries a day' });
         }
-        req.body.start_date = new Date();
+        req.body.start_date = date;
 
         const updatedDelivery = await dbDelivery.update(req.body);
 
