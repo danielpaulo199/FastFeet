@@ -1,6 +1,15 @@
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
-import { isAfter, isBefore, parseISO } from 'date-fns';
+import {
+    isAfter,
+    isBefore,
+    setSeconds,
+    setMinutes,
+    setHours,
+    startOfDay,
+    endOfDay,
+} from 'date-fns';
+
 import Deliveryman from '../models/Deliveryman';
 import Delivery from '../models/Delivery';
 import File from '../models/File';
@@ -93,6 +102,43 @@ class DeliverymanAccessController {
             return res.status(400).json({ error: 'Delivery canceled' });
         }
 
+        const initialDate = new Date();
+        const initialHour = setHours(
+            setMinutes(setSeconds(initialDate, 8), 0),
+            0
+        );
+        const finalHour = setHours(
+            setMinutes(setSeconds(initialDate, 18), 0),
+            0
+        );
+
+        if (
+            isAfter(initialDate, finalHour) ||
+            isBefore(initialDate, finalHour)
+        ) {
+            return res.status(400).json({
+                error:
+                    'Deliveries can only be withdraw beetwen 8:00 am and 18:00 pm',
+            });
+        }
+
+        const { count: numberOfDeliveries } = await Delivery.findAndCountAll({
+            where: {
+                deliveryman_id: id,
+                start_date: {
+                    [Op.between]: [
+                        startOfDay(initialDate),
+                        endOfDay(initialDate),
+                    ],
+                },
+            },
+        });
+
+        if (numberOfDeliveries >= 5) {
+            return res
+                .status(400)
+                .json({ error: 'You cant only withdraw 5 deliveries a day' });
+        }
         req.body.start_date = new Date();
 
         const updatedDelivery = await dbDelivery.update(req.body);
