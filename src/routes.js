@@ -19,6 +19,11 @@ routes.post('/login', SessionController.store);
 routes.get('/deliveryman/:id/deliveries', DMAController.index);
 routes.get('/deliveryman/:id/deliveries/dones', DMAController.show);
 routes.put('/deliveryman/:id/:delivery/withdraw', DMAController.withdraw);
+routes.put(
+    '/deliveryman/:id/:delivery/signature',
+    upload.single('file'),
+    DMAController.signature
+);
 routes.put('/deliveryman/:id/:delivery/finish', DMAController.finish);
 
 routes.use(AuthMiddleware);

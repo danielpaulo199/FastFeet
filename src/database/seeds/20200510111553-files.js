@@ -1,29 +1,21 @@
 module.exports = {
     up: (QueryInterface) => {
         return QueryInterface.bulkInsert(
-            'Deliveries',
+            'Files',
             [
                 {
-                    name: '',
-                    path: '',
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },
                 {
-                    name: '',
-                    path: '',
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },
                 {
-                    name: '',
-                    path: '',
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },
                 {
-                    name: '',
-                    path: '',
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 },

@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import { isAfter, isBefore, parseISO } from 'date-fns';
 import Deliveryman from '../models/Deliveryman';
 import Delivery from '../models/Delivery';
+import File from '../models/File';
 
 class DeliverymanAccessController {
     async index(req, res) {
@@ -80,6 +81,18 @@ class DeliverymanAccessController {
             return res.status(400).json({ error: 'Delivery not exists' });
         }
 
+        if (dbDelivery.end_date !== null) {
+            return res.status(400).json({ error: 'Delivery already ended' });
+        }
+
+        if (dbDelivery.start_date !== null) {
+            return res.status(400).json({ error: 'Delivery already started' });
+        }
+
+        if (dbDelivery.canceled_at !== null) {
+            return res.status(400).json({ error: 'Delivery canceled' });
+        }
+
         req.body.start_date = new Date();
 
         const updatedDelivery = await dbDelivery.update(req.body);
@@ -89,7 +102,6 @@ class DeliverymanAccessController {
 
     async finish(req, res) {
         const schema = Yup.object().shape({
-            signature_id: Yup.number().required(),
             end_date: Yup.date().required(),
         });
 
@@ -102,14 +114,57 @@ class DeliverymanAccessController {
             return res.status(400).json({ error: 'Invalid Deliveryman' });
         }
 
-        const delivery = await Delivery.findByPk(req.params.delivery, {
-            where: { start_date: null, canceled_at: null },
-        });
+        const delivery = await Delivery.findByPk(req.params.delivery);
         if (!delivery) {
             return res.status(400).json({ error: 'Invalid Delivery' });
         }
 
-        return res.status(200);
+        if (delivery.deliveryman_id !== deliveryman.id) {
+            return res
+                .status(200)
+                .json({ error: 'You dont have this delivery' });
+        }
+
+        if (delivery.start_date === null) {
+            return res.status(400).json({ error: 'Delivery not started' });
+        }
+
+        if (delivery.end_date !== null) {
+            return res.status(400).json({ error: 'Delivery already ended' });
+        }
+
+        if (delivery.canceled_at !== null) {
+            return res.status(400).json({ error: 'Delivery is canceled' });
+        }
+
+        const signature = await File.findByPk(delivery.signature_id);
+
+        if (!signature) {
+            return res.status(400).json({ error: 'Signature row not found' });
+        }
+
+        if (signature.path === null && signature.name === null) {
+            return res
+                .status(400)
+                .json({ error: 'Signature not provided yet' });
+        }
+
+        await delivery.update(req.body);
+
+        return res.status(200).json({ delivery });
+    }
+
+    async signature(req, res) {
+        const { originalname: name, filename: path } = req.file;
+
+        const signature = await File.findByPk(req.params.delivery);
+        if (!signature) {
+            return res.status(400).json({ error: 'Signature row not find' });
+        }
+
+        await signature.update({ name, path });
+
+        return res.status(200).json({ signature });
     }
 }
 
