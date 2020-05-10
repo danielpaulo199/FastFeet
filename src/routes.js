@@ -8,6 +8,7 @@ import DeliverymanController from './app/controllers/DeliverymanController';
 import FileController from './app/controllers/FileController';
 import DeliveryController from './app/controllers/DeliveryController';
 import DMAController from './app/controllers/DeliverymanAccessController';
+import DeliveryProblem from './app/controllers/Delivery-problemController';
 
 import AuthMiddleware from './app/middlewares/auth';
 
@@ -40,5 +41,7 @@ routes.delete('/deliverymans/:id', DeliverymanController.delete);
 routes.post('/deliveries', DeliveryController.store);
 routes.get('/deliveries', DeliveryController.index);
 routes.put('/deliveries/:id', DeliveryController.update);
+
+routes.post('/deliveries/:id/problems', DeliveryProblem.store);
 
 export default routes;
