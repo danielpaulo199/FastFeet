@@ -8,7 +8,7 @@ import DeliverymanController from './app/controllers/DeliverymanController';
 import FileController from './app/controllers/FileController';
 import DeliveryController from './app/controllers/DeliveryController';
 import DMAController from './app/controllers/DeliverymanAccessController';
-import DeliveryProblem from './app/controllers/Delivery-problemController';
+import DeliveryProblem from './app/controllers/DeliveryProblemController';
 
 import AuthMiddleware from './app/middlewares/auth';
 
@@ -27,6 +27,8 @@ routes.put(
 );
 routes.put('/deliveryman/:id/:delivery/finish', DMAController.finish);
 
+routes.post('/deliveries/:id/problems', DeliveryProblem.store);
+
 routes.use(AuthMiddleware);
 routes.post('/files', upload.single('file'), FileController.store);
 
@@ -42,6 +44,7 @@ routes.post('/deliveries', DeliveryController.store);
 routes.get('/deliveries', DeliveryController.index);
 routes.put('/deliveries/:id', DeliveryController.update);
 
-routes.post('/deliveries/:id/problems', DeliveryProblem.store);
+routes.get('/deliveries/problems', DeliveryProblem.show);
+routes.get('/deliveries/:id/problems', DeliveryProblem.index);
 
 export default routes;

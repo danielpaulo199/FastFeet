@@ -5,7 +5,7 @@ import Recipient from '../app/models/Recipient';
 import Deliveryman from '../app/models/Deliveryman';
 import Delivery from '../app/models/Delivery';
 import File from '../app/models/File';
-import DeliveryProblem from '../app/models/Delivery-problem';
+import DeliveryProblem from '../app/models/DeliveryProblem';
 
 const models = [User, Recipient, File, Deliveryman, Delivery, DeliveryProblem]; // todos models da aplicação
 class Database {
@@ -16,7 +16,12 @@ class Database {
     init() {
         this.connection = new Sequelize(databaseConfig); // inicia conexão
 
-        models.map((model) => model.init(this.connection)); // carrega models
+        models
+            .map((model) => model.init(this.connection))
+            .map(
+                (model) =>
+                    model.associate && model.associate(this.connection.models)
+            );
     }
 }
 

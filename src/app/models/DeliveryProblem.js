@@ -6,8 +6,6 @@ class DeliveryProblem extends Model {
             {
                 delivery_id: Sequelize.INTEGER,
                 description: Sequelize.STRING,
-                start_date: Sequelize.DATE,
-                end_date: Sequelize.DATE,
             },
             {
                 sequelize,
@@ -15,6 +13,13 @@ class DeliveryProblem extends Model {
         );
 
         return this;
+    }
+
+    static associate(models) {
+        this.belongsTo(models.Delivery, {
+            foreignKey: 'delivery_id',
+            as: 'delivery',
+        });
     }
 }
 
