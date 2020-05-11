@@ -71,6 +71,32 @@ class DeliveryProblemController {
 
         return res.status(200).json({ delivery });
     }
+
+    async cancel(req, res) {
+        const problemId = req.params.id;
+
+        const problem = await DeliveryProblem.findByPk(problemId);
+        if (!problem) {
+            return res
+                .status(400)
+                .json({ error: 'Delivery problem not found' });
+        }
+
+        const { delivery_id } = problem;
+
+        const delivery = await Delivery.findByPk(delivery_id);
+        if (!delivery_id) {
+            return res.status(400).json({ error: 'Invalid Delivery' });
+        }
+        if (delivery.canceled_at !== null) {
+            return res.status(400).json({ error: 'Delivery already canceled' });
+        }
+
+        req.body.canceled_at = new Date();
+        await delivery.update(req.body);
+
+        return res.status(200).json({ delivery });
+    }
 }
 
 export default new DeliveryProblemController();
